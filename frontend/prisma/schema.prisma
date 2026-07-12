@@ -1,0 +1,104 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Media {
+  id          String   @id @default(cuid())
+  url         String   @unique
+  alt         String
+  sourceLabel String?
+  sourceUrl   String?
+  filename    String?
+  mimeType    String?
+  size        Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products   Product[]
+  newsItems  NewsItem[]
+  sitePhotos SitePhoto[]
+}
+
+model Product {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  yomi            String
+  category        String
+  description     String
+  longDescription String
+  price           String?
+  note            String?
+  season          String
+  emoji           String   @default("🍪")
+  emojiBg         String   @default("from-honey-100 to-milk-200")
+  sortOrder       Int      @default(0)
+  isPublished     Boolean  @default(true)
+  imageId         String?
+  image           Media?   @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([isPublished, sortOrder])
+}
+
+model NewsItem {
+  id          String   @id @default(cuid())
+  title       String
+  category    String
+  body        String?
+  publishedAt DateTime
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  imageId     String?
+  image       Media?   @relation(fields: [imageId], references: [id], onDelete: SetNull)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished, publishedAt])
+}
+
+model SpecialDay {
+  id        String   @id @default(cuid())
+  date      DateTime @unique
+  label     String   @default("臨時休業")
+  isClosed  Boolean  @default(true)
+  hours     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+}
+
+model Faq {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String
+  category    String   @default("一般")
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isPublished, category, sortOrder])
+}
+
+model SitePhoto {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  placement   String   @default("gallery")
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  imageId     String
+  image       Media    @relation(fields: [imageId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([isActive, placement, sortOrder])
+}

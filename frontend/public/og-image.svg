@@ -1,0 +1,13 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#fffcf8"/>
+  <rect x="48" y="48" width="1104" height="534" rx="28" fill="#fff8ef" stroke="#f0d880" stroke-width="3"/>
+  <path d="M48 420C240 378 384 462 574 420C748 382 888 456 1152 404V582H48V420Z" fill="#f8d8e4"/>
+  <circle cx="990" cy="156" r="82" fill="#faf0d0"/>
+  <circle cx="1008" cy="156" r="38" fill="#d5ecf3"/>
+  <text x="96" y="158" fill="#8c6820" font-family="serif" font-size="32" letter-spacing="8">長崎県諫早市高来町</text>
+  <text x="96" y="286" fill="#3d2010" font-family="serif" font-size="96" font-weight="700">お菓子の</text>
+  <text x="96" y="396" fill="#5c3820" font-family="serif" font-size="112" font-weight="700">みよしや</text>
+  <text x="100" y="482" fill="#7a5030" font-family="sans-serif" font-size="34">昭和10年創業の和洋菓子店</text>
+  <text x="100" y="532" fill="#7a5030" font-family="sans-serif" font-size="28">水まんじゅう・蜂蜜丸ぼうろ・栗どら・桃カステラ</text>
+  <text x="902" y="492" fill="#3d2010" font-family="serif" font-size="34" font-weight="700">0957-32-2372</text>
+</svg>

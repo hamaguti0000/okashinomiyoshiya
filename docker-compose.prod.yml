@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: sweets-lp-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${DB_USER:-sweets}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB:       sweets_lp
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-sweets} -d sweets_lp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    # DBポートは外部に公開しない（セキュリティ）
+
+  app:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: sweets-lp-app
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL:           postgresql://${DB_USER:-sweets}:${DB_PASSWORD}@db:5432/sweets_lp?schema=public
+      ADMIN_PASSWORD:         ${ADMIN_PASSWORD}
+      NEXT_PUBLIC_SITE_URL:   ${NEXT_PUBLIC_SITE_URL}
+      NODE_ENV:               production
+    ports:
+      - "3000:3000"
+    volumes:
+      - uploads:/app/public/uploads
+
+volumes:
+  postgres-data:
+  uploads:

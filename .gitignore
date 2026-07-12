@@ -1,0 +1,16 @@
+# Claude Code local settings
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Production environment secrets
+.env
+.env.*
+!.env.example
+!.env.production.example
+!.env.production.wp.example
