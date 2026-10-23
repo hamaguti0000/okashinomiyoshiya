@@ -39,6 +39,10 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const others = products.filter((p) => p.id !== product.id).slice(0, 3);
 
+  // 「70円（税込）1個」「6個入り 1,000円（税込）」のような文字から、円の数字を取り出す(円が1つだけのときだけ)
+  const yenMatches = product.price?.match(/[\d,]+(?=円)/g) ?? [];
+  const priceYen = yenMatches.length === 1 ? Number(yenMatches[0].replace(/,/g, "")) : null;
+
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -46,20 +50,27 @@ export default async function ProductDetailPage({ params }: Props) {
     description: product.longDescription || product.description,
     ...(product.image ? { image: `${BASE_URL}${product.image.src}` } : {}),
     brand: { "@type": "Brand", name: "お菓子のみよしや" },
-    offers: {
-      "@type": "Offer",
-      availability: "https://schema.org/InStore",
-      seller: {
-        "@type": "LocalBusiness",
-        name: "お菓子のみよしや",
-        address: {
-          "@type": "PostalAddress",
-          addressLocality: "諫早市",
-          addressRegion: "長崎県",
-          addressCountry: "JP",
-        },
-      },
-    },
+    // price がない Offer は検索のエラーになるので、価格が読み取れるときだけ offers を付ける
+    ...(priceYen !== null
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: String(priceYen),
+            priceCurrency: "JPY",
+            availability: "https://schema.org/InStore",
+            seller: {
+              "@type": "LocalBusiness",
+              name: "お菓子のみよしや",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "諫早市",
+                addressRegion: "長崎県",
+                addressCountry: "JP",
+              },
+            },
+          },
+        }
+      : {}),
   };
 
   return (
