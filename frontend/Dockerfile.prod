@@ -1,0 +1,41 @@
+# ─── Stage 1: Build ───────────────────────────────────────────
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+COPY prisma ./prisma
+RUN npm ci
+
+COPY . .
+
+# Prisma クライアント生成
+RUN npx prisma generate
+
+# Next.js ビルド（ビルド時はDBなしでもOKにするためダミーURL）
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+RUN npm run build
+
+# ─── Stage 2: Production runtime ──────────────────────────────
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# 必要なファイルだけコピー
+COPY --from=builder /app/public          ./public
+COPY --from=builder /app/.next           ./.next
+COPY --from=builder /app/node_modules    ./node_modules
+COPY --from=builder /app/src             ./src
+COPY --from=builder /app/prisma          ./prisma
+COPY --from=builder /app/prisma.config.ts ./
+COPY --from=builder /app/next.config.ts  ./
+COPY --from=builder /app/package*.json   ./
+
+EXPOSE 3000
+
+# DB スキーマ適用 → アプリ起動
+CMD ["sh", "-c", "npx prisma db push && npm start"]

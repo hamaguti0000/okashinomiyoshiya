@@ -1,0 +1,211 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Miyoshiya Noto Serif JP";
+  src: url("/fonts/NotoSerifJP-Regular.ttf") format("truetype");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+:root {
+  --background: #fffcf8;
+  --foreground: #5c3820;
+  --font-heading: "Miyoshiya Noto Serif JP", "Yu Mincho", "Hiragino Mincho ProN", "Noto Serif JP", serif;
+  --font-body: "Hiragino Sans", "Yu Gothic", "Yu Gothic UI", "Noto Sans JP", "Miyoshiya Noto Serif JP", sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-heading);
+
+  /* Sakura pink — muted rose */
+  --color-sakura-50:  #fff5f8;
+  --color-sakura-100: #f8d8e4;
+  --color-sakura-200: #edafc4;
+  --color-sakura-300: #d98aa6;
+  --color-sakura-400: #c0627c;
+
+  /* Milk cream */
+  --color-milk-50:  #fffcf8;
+  --color-milk-100: #fff8ef;
+  --color-milk-200: #feeedd;
+  --color-milk-300: #fddbb8;
+
+  /* Caramel brown */
+  --color-caramel-100: #f5e6d3;
+  --color-caramel-200: #e5c9a8;
+  --color-caramel-300: #c9a078;
+  --color-caramel-400: #a07248;
+  --color-caramel-500: #7a5030;
+  --color-caramel-600: #5c3820;
+  --color-caramel-700: #3d2010;
+
+  /* Forest green (water/nature) */
+  --color-forest-50:  #f2f7ef;
+  --color-forest-100: #dce9d6;
+  --color-forest-200: #b3cca8;
+  --color-forest-300: #7aaa6e;
+  --color-forest-400: #4a8c3c;
+  --color-forest-500: #2e6e28;
+  --color-forest-600: #1c5218;
+  --color-forest-700: #103810;
+
+  /* Honey gold */
+  --color-honey-100: #faf0d0;
+  --color-honey-200: #f5df90;
+  --color-honey-300: #e8c040;
+
+  /* Stream / water */
+  --color-stream-50:  #f0f7fa;
+  --color-stream-100: #d5ecf3;
+  --color-stream-200: #a0d0e8;
+  --color-stream-300: #55aad0;
+  --color-stream-400: #2088b0;
+
+  /* Gold / wagashi luxury */
+  --color-gold-50:  #fdfaf2;
+  --color-gold-100: #faf3d4;
+  --color-gold-200: #f0d880;
+  --color-gold-300: #d4a840;
+  --color-gold-400: #b88830;
+  --color-gold-500: #8c6820;
+
+  /* Deep navy (water / night) */
+  --color-deep-700: #1a2744;
+  --color-deep-800: #0f1c33;
+  --color-deep-900: #070d1c;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body), "Noto Sans JP", sans-serif;
+}
+
+.admin-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-caramel-400);
+}
+
+.admin-input,
+.admin-textarea {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid var(--color-sakura-100);
+  background: var(--color-milk-50);
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-caramel-700);
+  outline: none;
+}
+
+.admin-input:focus,
+.admin-textarea:focus {
+  border-color: var(--color-sakura-300);
+}
+
+.admin-textarea {
+  line-height: 1.8;
+}
+
+html {
+  scroll-padding-top: 72px;
+}
+
+/* 管理バー表示時（公開ページのみ）はスクロールオフセットを追加 */
+html[data-admin="true"] {
+  scroll-padding-top: 104px;
+}
+/* 管理ページ上では管理バーが非表示なので元に戻す */
+html[data-admin="true"]:has([data-admin-page]) {
+  scroll-padding-top: 72px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px) rotate(-2deg); }
+  50%       { transform: translateY(-14px) rotate(2deg); }
+}
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes ripple-expand {
+  0%   { transform: scale(1);   opacity: 0.5; }
+  100% { transform: scale(1.9); opacity: 0;   }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.75) rotate(0deg); }
+  50%       { opacity: 0.9; transform: scale(1.25) rotate(20deg); }
+}
+@keyframes petal-fall {
+  0%   { transform: translateY(0)    rotate(0deg)  scale(1);    opacity: 0.7; }
+  100% { transform: translateY(80px) rotate(40deg) scale(0.7);  opacity: 0; }
+}
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(192, 98, 124, 0.35); }
+  50%       { box-shadow: 0 0 0 5px rgba(192, 98, 124, 0);  }
+}
+@keyframes slide-up-fade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+@keyframes draw-line {
+  from { width: 0; }
+  to   { width: 2rem; }
+}
+
+.animate-float       { animation: float        4s ease-in-out infinite; }
+.animate-float-slow  { animation: float-slow   6s ease-in-out infinite; }
+.animate-spin-slow   { animation: spin-slow   24s linear       infinite; }
+.animate-ripple-1    { animation: ripple-expand 4s ease-out          infinite; }
+.animate-ripple-2    { animation: ripple-expand 4s ease-out 1.3s     infinite; }
+.animate-ripple-3    { animation: ripple-expand 4s ease-out 2.6s     infinite; }
+.animate-twinkle     { animation: twinkle      2.8s ease-in-out infinite; }
+.animate-badge-pulse { animation: badge-pulse  2s   ease-in-out infinite; }
+
+@keyframes petal-drift-down {
+  0%   { transform: translateY(-60px) translateX(0px)   rotate(0deg)  scale(1);    opacity: 0; }
+  8%   { opacity: 0.65; }
+  92%  { opacity: 0.35; }
+  100% { transform: translateY(110vh)  translateX(45px)  rotate(80deg) scale(0.65); opacity: 0; }
+}
+@keyframes petal-drift-down-2 {
+  0%   { transform: translateY(-60px) translateX(0px)   rotate(15deg)  scale(1);    opacity: 0; }
+  8%   { opacity: 0.5; }
+  92%  { opacity: 0.25; }
+  100% { transform: translateY(110vh)  translateX(-30px) rotate(-60deg) scale(0.7);  opacity: 0; }
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.25; }
+  50%       { opacity: 0.7;  }
+}
+@keyframes water-ripple {
+  0%   { transform: scale(1);   opacity: 0.5; }
+  100% { transform: scale(4);   opacity: 0;   }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+
+.animate-petal-a   { animation: petal-drift-down   7s  ease-in 0s    infinite; }
+.animate-petal-b   { animation: petal-drift-down-2 9s  ease-in 2.5s  infinite; }
+.animate-petal-c   { animation: petal-drift-down   8s  ease-in 1.2s  infinite; }
+.animate-petal-d   { animation: petal-drift-down-2 10s ease-in 0.8s  infinite; }
+.animate-glow-pulse { animation: glow-pulse        3s  ease-in-out   infinite; }
+.animate-water-ripple-1 { animation: water-ripple  5s ease-out       infinite; }
+.animate-water-ripple-2 { animation: water-ripple  5s ease-out 1.66s infinite; }
+.animate-water-ripple-3 { animation: water-ripple  5s ease-out 3.33s infinite; }
